@@ -1,422 +1,109 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const arquivo = path.join(path.dirname(fileURLToPath(import.meta.url)), '../config/cosmeticos.json');
+const campos = ["nome", "marca", "categoria", "descricao", "preco", "quantidade", "imagem"];
+const obrigatorios = ["nome", "categoria", "preco", "quantidade"];
 
-const arquivoltens = path.join(
- __dirname,
- '../config/itens.json'
-);
-
-function lerItens() {
- const dados = fs.readFileSync(
-  arquivoltens,
-  'utf-8'
- );
-
- return JSON.parse(dados);
+function ler() {
+  const dados = JSON.parse(fs.readFileSync(arquivo, 'utf8'));
+  if (!Array.isArray(dados)) throw new Error('O arquivo de dados precisa conter uma lista.');
+  return dados;
 }
-function salvarItens(itens){
-    fs.writeFileSync(
-     arquivoltens,
-     JSON.stringify(itens, null, 2)   
-    );
-}
-// CRUD - Create, Read, Updade, Delete
-// Read - GET todos os itens
-function getAllItens(req, res){
-try{
-    const itens = lerItens();
-
-    return res.status(200).json({
-        status: 200,
-        message: 'itens encontrados.',
-        data: itens
-    });
-}    catch (error){
-    console.error(error);
-
-    return res.status(500).json({
-        status: 500,
-        message: 'Erro ao carregar itens.'
-    });
-}
-}
-
-function getItemById(req,res) {
-try{
- const id = Number(req.params.id);
-const itens = lerItens();
-
-const item = itens. find(
-item => item.id === id
-);
-
-if (!item) {
- return res.status(404).json({
-    status: 404,
-    message: 'Item nao encontrado.'
- });
-}
- 
-return res.status(200).json({
- status: 200,
-data: item
-});
-} catch (error) {
-return res.status(500).json({
- status: 500,
- message: 'Erro interno.'
-});
-}}
-
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-
-const __dirname = path.dirname(__filename);
-
-const arquivoItens = path.join(
-  __dirname,
-  '../config/itens.json'
-);
-
-function lerItens() {
-
-  const dados = fs.readFileSync(
-    arquivoItens,
-    'utf-8'
-  );
-
-  return JSON.parse(dados);
-}
-
-function salvarItens(itens) {
-
-  fs.writeFileSync(
-    arquivoItens,
-    JSON.stringify(itens, null, 2)
-  );
-
-}
-
- // CRUD - Create, Read, Update, Delete
- // Read - GET todos os itens
-function getAllItens(req, res) {
+function salvar(dados) {
+  const temporario = `${arquivo}.${process.pid}.tmp`;
   try {
-    const itens = lerItens();
-
-    return res.status(200).json({
-      status: 200,
-      message: 'Itens encontrados.',
-      data: itens
-    });
-  } catch (error) {
-    console.error(error);
-
-    return res.status(500).json({
-      status: 500,
-      message: 'Erro ao carregar itens.'
-    });
+    fs.writeFileSync(temporario, JSON.stringify(dados, null, 2) + '\n', 'utf8');
+    fs.renameSync(temporario, arquivo);
+  } finally {
+    if (fs.existsSync(temporario)) fs.unlinkSync(temporario);
   }
 }
-
-// Read - GET item por ID
-function getItemById(req, res) {
-  try {
-    const id = Number(req.params.id);
-    const itens = lerItens();
-
-    const item = itens.find(
-      item => item.id === id
-    );
-
-    if (!item) {
-      return res.status(404).json({
-        status: 404,
-        message: 'Item não encontrado.'
-      });
-    }
-
-    return res.status(200).json({
-      status: 200,
-      data: item
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: 500,
-      message: 'Erro interno.'
-    });
-  }
+function idValido(valor) {
+  if (!/^[1-9]\d*$/.test(valor)) return null;
+  const id = Number(valor);
+  return Number.isSafeInteger(id) ? id : null;
 }
-
-// Create - POST criar novo item
-function createItem(req, res) {
-  try {
-
-    const {
-      nome,
-      descricao,
-      categoria,
-      imagem,
-      quantidade,
-      preco
-    } = req.body;
-
-
-    // Validação dos campos obrigatórios
-    if (
-      !nome ||
-      !categoria ||
-      !imagem ||
-      quantidade === undefined ||
-      preco === undefined
-    ) {
-
-      return res.status(400).json({
-        status: 400,
-        message: 'Preencha os campos obrigatórios.'
-      });
-
-    }
-
-
-    // Busca os itens que já existem
-    const itens = lerItens();
-
-
-    // Cria um novo ID
-    const novoId =
-      itens.length > 0
-        ? Math.max(...itens.map(item => item.id)) + 1
-        : 1;
-
-
-    // Pega a data atual
-    const agora = new Date().toISOString();
-
-
-    // Cria o novo objeto
-    const novoItem = {
-      id: novoId,
-      nome: nome,
-      descricao: descricao || '',
-      categoria: categoria.toLowerCase(),
-      imagem: imagem,
-      quantidade: Number(quantidade),
-      preco: Number(preco),
-      data_criacao: agora,
-      data_atualizacao: agora
-    };
-
-
-    // Adiciona o novo item no array
-    itens.push(novoItem);
-
-
-    // Salva novamente no JSON
-    salvarItens(itens);
-
-
-    // Retorna o item criado
-    return res.status(201).json({
-      status: 201,
-      message: 'Item criado com sucesso.',
-      data: novoItem
-    });
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    return res.status(500).json({
-      status: 500,
-      message: 'Erro ao criar item.'
-    });
-
+function validar(body, atualizacao = false) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return 'Envie um objeto JSON válido.';
+  if (Object.keys(body).some(c => !campos.includes(c))) return 'O corpo contém campos desconhecidos ou o campo id, que é automático.';
+  if (!atualizacao && obrigatorios.some(c => body[c] === undefined || body[c] === null || body[c] === '')) return `Campos obrigatórios: ${obrigatorios.join(', ')}.`;
+  if (atualizacao && Object.keys(body).length === 0) return 'Informe pelo menos um campo para atualizar.';
+  const strings = ["nome", "marca", "categoria", "descricao", "imagem"];
+  for (const campo of strings) {
+    if (body[campo] !== undefined && (typeof body[campo] !== 'string' || !body[campo].trim())) return `O campo ${campo} deve ser um texto não vazio.`;
   }
-}
-
-
-// Update - PUT atualizar item
-
-function updateItem(req, res) {
-  try {
-
-    // Pega o ID da URL
-    const id = Number(req.params.id);
-
-
-    // Lê os itens
-    const itens = lerItens();
-
-
-    // Procura a posição do item
-    const index = itens.findIndex(
-      item => item.id === id
-    );
-
-
-    // Se não encontrar
-    if (index === -1) {
-
-      return res.status(404).json({
-        status: 404,
-        message: 'Item não encontrado.'
-      });
-
-    }
-
-
-    // Dados enviados pelo usuário
-    const {
-      nome,
-      descricao,
-      categoria,
-      imagem,
-      quantidade,
-      preco
-    } = req.body;
-
-
-    // Atualiza o item
-    itens[index] = {
-
-      // Mantém os dados antigos
-      ...itens[index],
-
-      // Atualiza somente o que foi enviado
-
-      nome:
-        nome !== undefined
-          ? nome
-          : itens[index].nome,
-
-      descricao:
-        descricao !== undefined
-          ? descricao
-          : itens[index].descricao,
-
-      categoria:
-        categoria !== undefined
-          ? categoria.toLowerCase()
-          : itens[index].categoria,
-
-      imagem:
-        imagem !== undefined
-          ? imagem
-          : itens[index].imagem,
-
-      quantidade:
-        quantidade !== undefined
-          ? Number(quantidade)
-          : itens[index].quantidade,
-
-      preco:
-        preco !== undefined
-          ? Number(preco)
-          : itens[index].preco,
-
-      data_atualizacao:
-        new Date().toISOString()
-    };
-
-
-    // Salva no JSON
-    salvarItens(itens);
-
-
-    // Retorna o item atualizado
-    return res.status(200).json({
-      status: 200,
-      message: 'Item atualizado com sucesso.',
-      data: itens[index]
-    });
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    return res.status(500).json({
-      status: 500,
-      message: 'Erro ao atualizar item.'
-    });
-
+  for (const campo of ["preco", "quantidade"]) {
+    if (body[campo] === undefined || body[campo] === null) continue;
+    if (typeof body[campo] !== 'number' || !Number.isFinite(body[campo])) return `O campo ${campo} deve ser numérico.`;
   }
+  if (body.preco !== undefined && body.preco < 0) return 'Preço não pode ser negativo.';
+  if (body.quantidade !== undefined && (!Number.isInteger(body.quantidade) || body.quantidade < 0)) return 'Quantidade deve ser um inteiro não negativo.';
+  return null;
 }
-
-
-// Delete - DELETE remover item
-
-function deleteItem(req, res) {
+function tratarErro(res, erro) {
+  console.error('Erro ao acessar os dados:', erro);
+  return res.status(500).json({ status: 500, message: 'Erro interno ao acessar os dados.' });
+}
+function getAll(req, res) {
+  try { return res.status(200).json({ status: 200, message: 'Lista consultada com sucesso.', data: ler() }); }
+  catch (erro) { return tratarErro(res, erro); }
+}
+function getById(req, res) {
+  const id = idValido(req.params.id);
+  if (!id) return res.status(400).json({ status: 400, message: 'ID inválido.' });
   try {
-
-    // Pega o ID da URL
-    const id = Number(req.params.id);
-
-
-    // Lê os itens
-    const itens = lerItens();
-
-
-    // Procura a posição do item
-    const index = itens.findIndex(
-      item => item.id === id
-    );
-
-
-    // Se não encontrar
-    if (index === -1) {
-
-      return res.status(404).json({
-        status: 404,
-        message: 'Item não encontrado.'
-      });
-
-    }
-
-
-    // Remove o item
-    const itemRemovido = itens.splice(index, 1)[0];
-
-
-    // Salva o novo array
-    salvarItens(itens);
-
-
-    // Retorna o item removido
-    return res.status(200).json({
-      status: 200,
-      message: 'Item removido com sucesso.',
-      data: itemRemovido
-    });
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    return res.status(500).json({
-      status: 500,
-      message: 'Erro ao excluir item.'
-    });
-
-  }
+    const item = ler().find(x => Number(x.id) === id);
+    if (!item) return res.status(404).json({ status: 404, message: 'Registro não encontrado.' });
+    return res.status(200).json({ status: 200, data: item });
+  } catch (erro) { return tratarErro(res, erro); }
 }
-
-
-// Exporta todas as funções do controller
+function create(req, res) {
+  const erroValidacao = validar(req.body);
+  if (erroValidacao) return res.status(400).json({ status: 400, message: erroValidacao });
+  try {
+    const dados = ler();
+    const novoId = Math.max(0, ...dados.map(x => Number(x.id) || 0)) + 1;
+    const novo = { id: novoId, ...Object.fromEntries(campos.filter(c => req.body[c] !== undefined).map(c => [c, req.body[c]])) };
+    dados.push(novo);
+    salvar(dados);
+    return res.status(201).json({ status: 201, message: 'Registro criado.', data: novo });
+  } catch (erro) { return tratarErro(res, erro); }
+}
+function update(req, res) {
+  const id = idValido(req.params.id);
+  if (!id) return res.status(400).json({ status: 400, message: 'ID inválido.' });
+  const erroValidacao = validar(req.body, true);
+  if (erroValidacao) return res.status(400).json({ status: 400, message: erroValidacao });
+  try {
+    const dados = ler();
+    const indice = dados.findIndex(x => Number(x.id) === id);
+    if (indice < 0) return res.status(404).json({ status: 404, message: 'Registro não encontrado.' });
+    const atualizado = { ...dados[indice], ...req.body, id };
+    if (obrigatorios.some(c => atualizado[c] === undefined || atualizado[c] === null || atualizado[c] === '')) return res.status(400).json({ status: 400, message: 'Campos obrigatórios não podem ser removidos.' });
+    dados[indice] = atualizado;
+    salvar(dados);
+    return res.status(200).json({ status: 200, message: 'Registro atualizado.', data: atualizado });
+  } catch (erro) { return tratarErro(res, erro); }
+}
+function remove(req, res) {
+  const id = idValido(req.params.id);
+  if (!id) return res.status(400).json({ status: 400, message: 'ID inválido.' });
+  try {
+    const dados = ler();
+    const indice = dados.findIndex(x => Number(x.id) === id);
+    if (indice < 0) return res.status(404).json({ status: 404, message: 'Registro não encontrado.' });
+    const [removido] = dados.splice(indice, 1);
+    salvar(dados);
+    return res.status(200).json({ status: 200, message: 'Registro excluído.', data: removido });
+  } catch (erro) { return tratarErro(res, erro); }
+}
 
 export default {
-  getAllItens,
-  getItemById,
-  createItem,
-  updateItem,
-  deleteItem
+  getAllCosmeticos: getAll,
+  getCosmeticoById: getById,
+  createCosmetico: create,
+  updateCosmetico: update,
+  deleteCosmetico: remove
 };

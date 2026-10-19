@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "nome": "Hidratante facial",
+    "marca": "Marca Exemplo",
+    "categoria": "Cuidados com a pele",
+    "descricao": "Hidratante para uso diário",
+    "preco": 39.9,
+    "quantidade": 12,
+    "imagem": "https://example.com/hidratante.jpg"
+  },
+  {
+    "id": 2,
+    "nome": "Batom vermelho",
+    "marca": "Marca Exemplo",
+    "categoria": "Maquiagem",
+    "descricao": "Batom de acabamento cremoso",
+    "preco": 24.9,
+    "quantidade": 8,
+    "imagem": "https://example.com/batom.jpg"
+  }
+]
