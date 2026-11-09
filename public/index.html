@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>DivaReal | Loja de Cosméticos</title>
+
+  <!-- Conexão com o CSS -->
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+  <!-- CABEÇALHO -->
+  <header>
+    <div class="logo">Diva<span>Real</span> ♡</div>
+
+    <nav>
+      <button onclick="showPage('inicio')">Início</button>
+      <button onclick="showPage('produtos')">Produtos</button>
+      <button onclick="showPage('sobre')">Sobre Nós</button>
+      <button onclick="showPage('inicio'); document.getElementById('cart').scrollIntoView()">
+        🛒 Carrinho (<span id="count">0</span>)
+      </button>
+    </nav>
+  </header>
+
+  <!-- BANNER -->
+  <section class="hero">
+    <h1>Realce sua beleza, seja uma Diva! ✨</h1>
+    <p>Descubra produtos incríveis para cuidar de você.</p>
+    <button class="buy" onclick="showPage('produtos')">
+      Conhecer produtos
+    </button>
+  </section>
+
+  <main>
+
+    <!-- INÍCIO -->
+    <section id="inicio" class="page active">
+      <h2>Bem-vinda à DivaReal 💗</h2>
+      <p>Beleza, cuidado e autoestima em um só lugar!</p>
+
+      <h2>Destaques da loja</h2>
+      <div id="featured" class="grid"></div>
+    </section>
+
+    <!-- PRODUTOS -->
+    <section id="produtos" class="page">
+      <h2>Todos os nossos produtos 💄</h2>
+      <div class="categories" id="categories"></div>
+      <div class="grid" id="productGrid"></div>
+    </section>
+
+    <!-- SOBRE NÓS -->
+    <section id="sobre" class="page">
+      <div class="about">
+        <h2>Sobre a DivaReal 🌸</h2>
+        <p>
+          A DivaReal nasceu para valorizar a beleza
+          e a autoestima de cada pessoa.
+        </p>
+        <p>
+          Oferecemos cosméticos, maquiagem, perfumes
+          e cuidados com a pele.
+        </p>
+        <h3>Seja você. Seja DivaReal!</h3>
+      </div>
+    </section>
+
+    <!-- CARRINHO -->
+    <section id="cart">
+      <h2>🛒 Meu carrinho</h2>
+      <div id="cartItems">Seu carrinho está vazio.</div>
+      <div class="total" id="total">Total: R$ 0,00</div>
+      <button class="buy" onclick="checkout()">
+        Finalizar pedido
+      </button>
+    </section>
+
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer>
+    <h3>DivaReal ♡</h3>
+    <p>Sua beleza, seu poder!</p>
+    <p>© 2026 DivaReal</p>
+  </footer>
+
+  <!-- Conexão com JavaScript -->
+  <script src="./js/index.js"></script>
+
+</body>
+</html>
