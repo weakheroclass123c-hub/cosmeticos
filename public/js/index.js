@@ -1,214 +1,247 @@
+const API_URL = '/api/cosmeticos';
 
-// LISTA DE PRODUTOS
-const products = [
-    ["Batom Rosa",25,"Maquiagem","https://http2.mlstatic.com/D_NQ_NP_688717-MLA113923750605_062026-O.webp"],
-    ["Batom Nude",29,"Maquiagem","https://m.media-amazon.com/images/I/615UuKVHxWS.jpg"],
-    ["Gloss Labial",22,"Maquiagem","https://static.cdnlive.com.br/uploads/790/produto/17244184767391_detalhe.png"],
-    ["Blush Rosa Quente",32,"Maquiagem","https://http2.mlstatic.com/D_NQ_NP_679503-MLB109677639812_042026-O-blush-color-glam-1--make-more.webp"],
-    ["Paleta de Sombras",55,"Maquiagem","photo-1512496015851-a90fb38ba796"],
-    ["Máscara de Cílios",27,"Maquiagem","photo-1631214540242-3cd8c6f8b5c7"],
-    ["Base Líquida",48,"Maquiagem","photo-1522335789203-aabd1fc54bc9"],
-    ["Pó Compacto",35,"Maquiagem","photo-1596462502278-27bfdc403348"],
-    ["Corretivo",30,"Maquiagem","photo-1522335789203-aabd1fc54bc9"],
-    ["Iluminador",38,"Maquiagem","photo-1596462502278-27bfdc403348"],
-    ["Perfume Floral",89,"Perfumes","photo-1541643600914-78b084683601"],
-    ["Perfume Elegance",110,"Perfumes","photo-1594035910387-fea47794261f"],
-    ["Body Splash",59,"Perfumes","photo-1592945403244-b3fbafd7f539"],
-    ["Creme Hidratante",45,"Skincare","photo-1608248543803-ba4f8c70ae0b"],
-    ["Sérum Facial",65,"Skincare","photo-1601049541289-9b1b7bbbfe19"],
-    ["Protetor Solar",52,"Skincare","photo-1556229010-6c3f2c9ca5f8"],
-    ["Sabonete Facial",28,"Skincare","photo-1556228720-195a672e8a03"],
-    ["Água Micelar",36,"Skincare","photo-1608248543803-ba4f8c70ae0b"],
-    ["Máscara Facial",19,"Skincare","photo-1556229010-6c3f2c9ca5f8"],
-    ["Óleo Capilar",39,"Cabelos","photo-1608248543803-ba4f8c70ae0b"],
-    ["Máscara Capilar",44,"Cabelos","photo-1608248543803-ba4f8c70ae0b"],
-    ["Shampoo",32,"Cabelos","photo-1608248543803-ba4f8c70ae0b"],
-    ["Condicionador",34,"Cabelos","photo-1608248543803-ba4f8c70ae0b"],
-    ["Kit Pincéis",49,"Acessórios","photo-1522335789203-aabd1fc54bc9"]
-  ];
-  
-  // CARRINHO
-  let cart = {};
-  
-  // FORMATAÇÃO DE PREÇOS
-  function money(n) {
-    return n.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL"
-    });
-  }
-  
-  // TROCAR DE PÁGINA
-  function showPage(id) {
-    document.querySelectorAll(".page")
-      .forEach(p => p.classList.remove("active"));
-  
-    document.getElementById(id)
-      .classList.add("active");
-  
-    window.scrollTo({top:0,behavior:"smooth"});
-  }
-  
-  // ENDEREÇO DAS IMAGENS
-  function imageUrl(photo) {
-    return photo;
+let products = [];
+let cart = {};
+let category = 'Todos';
+
+const money = value => Number(value || 0).toLocaleString('pt-BR', {
+  style: 'currency',
+  currency: 'BRL'
+});
+
+function escapeHTML(value = '') {
+  return String(value).replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[char]);
 }
-  
-  // CRIAR CONTAINER DO PRODUTO
-  function card(p,i) {
-    return `
-      <article class="card">
-        <img src="${imageUrl(p[3])}" alt="${p[0]}">
-        <h3>${p[0]}</h3>
-        <p class="price">${money(p[1])}</p>
-        <p>${p[2]}</p>
-  
-        <label>Quantidade:
-          <input type="number" min="1" max="99"
-          value="1" id="qty${i}">
-        </label>
-  
-        <button class="buy" onclick="add(${i})">
-          Adicionar ao carrinho 🛒
-        </button>
-      </article>
-    `;
+
+function showMessage(elementId, message, isError = false) {
+  const element = document.getElementById(elementId);
+  if (!element) return;
+  element.textContent = message;
+  element.classList.toggle('error', isError);
+  element.hidden = !message;
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+  const page = document.getElementById(id);
+  if (page) page.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function productCard(product) {
+  const id = Number(product.id);
+  return `
+    <article class="card">
+      <img
+        src="${escapeHTML(product.imagem || '')}"
+        alt="${escapeHTML(product.nome)}"
+        loading="lazy"
+        onerror="this.onerror=null;this.src='https://placehold.co/600x400/f8e8ef/8b4966?text=Produto+DivaReal';"
+      >
+      <h3>${escapeHTML(product.nome)}</h3>
+      <p class="price">${money(product.preco)}</p>
+      <p>${escapeHTML(product.categoria)}</p>
+      ${product.descricao ? `<p>${escapeHTML(product.descricao)}</p>` : ''}
+      <p>Disponíveis: ${Number(product.quantidade) || 0}</p>
+      <label>Quantidade:
+        <input type="number" min="1" max="99" value="1" id="qty-${id}" aria-label="Quantidade de ${escapeHTML(product.nome)}">
+      </label>
+      <button type="button" class="buy" data-add="${id}" ${Number(product.quantidade) <= 0 ? 'disabled' : ''}>
+        Adicionar ao carrinho 🛒
+      </button>
+    </article>
+  `;
+}
+
+function renderProducts() {
+  const grid = document.getElementById('productGrid');
+  if (!grid) return;
+
+  const filtered = products.filter(product =>
+    category === 'Todos' || product.categoria === category
+  );
+
+  grid.innerHTML = filtered.length
+    ? filtered.map(productCard).join('')
+    : '<p class="empty">Nenhum produto encontrado nesta categoria.</p>';
+}
+
+function renderCategories() {
+  const categories = ['Todos', ...new Set(products.map(product => product.categoria).filter(Boolean))];
+  document.getElementById('categories').innerHTML = categories.map(item => `
+    <button type="button"
+      class="${item === category ? 'active' : ''}"
+      data-category="${escapeHTML(item)}"
+      aria-pressed="${item === category}">
+      ${escapeHTML(item)}
+    </button>
+  `).join('');
+}
+
+function renderFeatured() {
+  const featured = document.getElementById('featured');
+  featured.innerHTML = products.slice(0, 4).map(productCard).join('');
+}
+
+function updateCart() {
+  const cartItems = document.getElementById('cartItems');
+  let total = 0;
+  let count = 0;
+
+  const entries = Object.entries(cart);
+  if (!entries.length) {
+    cartItems.textContent = 'Seu carrinho está vazio.';
+  } else {
+    cartItems.innerHTML = entries.map(([id, quantity]) => {
+      const product = products.find(item => Number(item.id) === Number(id));
+      if (!product) return '';
+      const subtotal = Number(product.preco) * quantity;
+      total += subtotal;
+      count += quantity;
+      return `
+        <div class="cart-item">
+          <div>
+            <strong>${escapeHTML(product.nome)}</strong><br>
+            ${money(product.preco)} cada
+          </div>
+          <label>
+            <span class="sr-only">Quantidade</span>
+            <input type="number" min="1" max="99" value="${quantity}"
+              data-change-quantity="${id}" aria-label="Quantidade de ${escapeHTML(product.nome)} no carrinho">
+          </label>
+          <strong>${money(subtotal)}</strong>
+          <button type="button" class="remove" data-remove="${id}">Remover</button>
+        </div>
+      `;
+    }).join('');
   }
-  
-  // MOSTRAR PRODUTOS
-  function renderProducts() {
-    document.getElementById("productGrid").innerHTML =
-      products.map((p,i) => ({p,i}))
-      .filter(x => category === "Todos" || x.p[2] === category)
-      .map(x => card(x.p,x.i)).join("");
+
+  document.getElementById('total').textContent = `Total: ${money(total)}`;
+  document.getElementById('count').textContent = count;
+}
+
+function addToCart(id) {
+  const product = products.find(item => Number(item.id) === Number(id));
+  const input = document.getElementById(`qty-${id}`);
+  const quantity = Number(input?.value);
+  const stock = Number(product?.quantidade) || 0;
+
+  if (!product) return;
+  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 99) {
+    alert('Escolha uma quantidade entre 1 e 99.');
+    return;
   }
-  
-  // CATEGORIAS
-  let category = "Todos";
-  
-  function renderCategories() {
-    let cats = ["Todos", ...new Set(products.map(p => p[2]))];
-  
-    document.getElementById("categories").innerHTML =
-      cats.map(c => `
-        <button class="${c===category?'active':''}"
-        onclick="setCategory('${c}')">${c}</button>
-      `).join("");
+  if ((cart[id] || 0) + quantity > stock) {
+    alert(`Estoque insuficiente. Disponível: ${Math.max(0, stock - (cart[id] || 0))}.`);
+    return;
   }
-  
-  function setCategory(c) {
-    category = c;
+
+  cart[id] = (cart[id] || 0) + quantity;
+  updateCart();
+  alert(`${product.nome} adicionado ao carrinho!`);
+}
+
+function changeQuantity(id, value) {
+  const quantity = Number(value);
+  const product = products.find(item => Number(item.id) === Number(id));
+  if (!product) return;
+
+  if (!Number.isInteger(quantity) || quantity < 1) {
+    delete cart[id];
+  } else if (quantity > 99 || quantity > Number(product.quantidade)) {
+    alert(`Quantidade inválida. Estoque disponível: ${product.quantidade}.`);
+    cart[id] = Math.min(99, Number(product.quantidade));
+  } else {
+    cart[id] = quantity;
+  }
+  updateCart();
+}
+
+function checkout() {
+  if (!Object.keys(cart).length) {
+    alert('Seu carrinho está vazio!');
+    return;
+  }
+
+  const lines = Object.entries(cart).map(([id, quantity]) => {
+    const product = products.find(item => Number(item.id) === Number(id));
+    return product ? `${product.nome} x ${quantity}` : '';
+  }).filter(Boolean);
+
+  const total = Object.entries(cart).reduce((sum, [id, quantity]) => {
+    const product = products.find(item => Number(item.id) === Number(id));
+    return sum + (product ? Number(product.preco) * quantity : 0);
+  }, 0);
+
+  alert(`Resumo do pedido:\n${lines.join('\n')}\nTotal: ${money(total)}\n\nCheckout demonstrativo: nenhum pagamento foi realizado.`);
+}
+
+async function loadProducts() {
+  showMessage('featuredMessage', 'Carregando produtos...');
+  showMessage('productsMessage', 'Carregando produtos...');
+
+  try {
+    const response = await fetch(API_URL, { headers: { Accept: 'application/json' } });
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(result.message || `Erro HTTP ${response.status}`);
+    }
+    if (!Array.isArray(result.data)) {
+      throw new Error('A API retornou uma lista de produtos inválida.');
+    }
+
+    products = result.data;
+    showMessage('featuredMessage', products.length ? '' : 'Ainda não há produtos cadastrados.');
+    showMessage('productsMessage', products.length ? '' : 'Ainda não há produtos cadastrados.');
+    renderFeatured();
+    renderCategories();
+    renderProducts();
+    updateCart();
+  } catch (error) {
+    console.error('Não foi possível carregar os produtos:', error);
+    showMessage('featuredMessage', `Não foi possível carregar os produtos. ${error.message}`, true);
+    showMessage('productsMessage', `Não foi possível carregar os produtos. ${error.message}`, true);
+    document.getElementById('featured').innerHTML = '';
+    document.getElementById('productGrid').innerHTML = '';
+  }
+}
+
+// Eventos delegados: os botões continuam funcionando após a renderização dinâmica.
+document.addEventListener('click', event => {
+  const pageButton = event.target.closest('[data-page]');
+  if (pageButton) showPage(pageButton.dataset.page);
+
+  const addButton = event.target.closest('[data-add]');
+  if (addButton) addToCart(addButton.dataset.add);
+
+  const categoryButton = event.target.closest('[data-category]');
+  if (categoryButton) {
+    category = categoryButton.dataset.category;
     renderCategories();
     renderProducts();
   }
-  
-  // ADICIONAR AO CARRINHO
-  function add(i) {
-    let qty = Number(document.getElementById("qty"+i).value);
-  
-    if (!Number.isInteger(qty) || qty < 1 || qty > 99) {
-      alert("Escolha uma quantidade entre 1 e 99.");
-      return;
-    }
-  
-    if (!cart[i]) cart[i] = 0;
-  
-    cart[i] += qty;
-  
-    updateCart();
-    alert(products[i][0] + " adicionado ao carrinho!");
-  }
-  
-  // ATUALIZAR CARRINHO
-  function updateCart() {
-    let html = "";
-    let total = 0;
-    let count = 0;
-  
-    for (let i in cart) {
-      let p = products[i];
-      let q = cart[i];
-      let sub = p[1] * q;
-  
-      total += sub;
-      count += q;
-  
-      html += `
-        <div class="cart-item">
-          <div>
-            <strong>${p[0]}</strong><br>
-            ${money(p[1])} cada
-          </div>
-  
-          <input type="number" min="1" max="99"
-            value="${q}"
-            onchange="changeQty(${i},this.value)">
-  
-          <strong>${money(sub)}</strong>
-  
-          <button class="remove"
-            onclick="removeItem(${i})">
-            Remover
-          </button>
-        </div>
-      `;
-    }
-  
-    document.getElementById("cartItems").innerHTML =
-      html || "Seu carrinho está vazio.";
-  
-    document.getElementById("total").innerText =
-      "Total: " + money(total);
-  
-    document.getElementById("count").innerText = count;
-  }
-  
-  // ALTERAR QUANTIDADE
-  function changeQty(i,qty) {
-    qty = Number(qty);
-  
-    if (!Number.isInteger(qty) || qty < 1) {
-      removeItem(i);
-      return;
-    }
-  
-    cart[i] = Math.min(99,qty);
+
+  const removeButton = event.target.closest('[data-remove]');
+  if (removeButton) {
+    delete cart[removeButton.dataset.remove];
     updateCart();
   }
-  
-  // REMOVER PRODUTO
-  function removeItem(i) {
-    delete cart[i];
-    updateCart();
-  }
-  
-  // FINALIZAR PEDIDO
-  function checkout() {
-    if (!Object.keys(cart).length) {
-      alert("Seu carrinho está vazio!");
-      return;
-    }
-  
-    let order = Object.entries(cart)
-      .map(([i,q]) => products[i][0] + " x " + q)
-      .join("\n");
-  
-    let total = Object.entries(cart)
-      .reduce((s,[i,q]) => s + products[i][1]*q,0);
-  
-    alert(
-      "Resumo do pedido:\n" +
-      order +
-      "\nTotal: " + money(total) +
-      "\n\nCheckout demonstrativo."
-    );
-  }
-  
-  // MOSTRAR DESTAQUES E INICIAR A LOJA
-  document.getElementById("featured").innerHTML =
-    products.slice(0,4).map((p,i) => card(p,i)).join("");
-  
-  renderCategories();
-  renderProducts();
-  updateCart();
-  
+});
+
+document.addEventListener('change', event => {
+  const quantityInput = event.target.closest('[data-change-quantity]');
+  if (quantityInput) changeQuantity(quantityInput.dataset.changeQuantity, quantityInput.value);
+});
+
+document.getElementById('goCart').addEventListener('click', () => {
+  showPage('inicio');
+  document.getElementById('cart').scrollIntoView({ behavior: 'smooth' });
+});
+document.getElementById('checkoutButton').addEventListener('click', checkout);
+
+renderCategories();
+updateCart();
+loadProducts();

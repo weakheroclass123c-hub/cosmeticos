@@ -1,22 +1,232 @@
 [
   {
     "id": 1,
-    "nome": "Hidratante facial",
-    "marca": "Marca Exemplo",
-    "categoria": "Cuidados com a pele",
-    "descricao": "Hidratante para uso diário",
-    "preco": 39.9,
-    "quantidade": 12,
-    "imagem": "https://example.com/hidratante.jpg"
+    "nome": "Batom Rosa",
+    "marca": "DivaReal",
+    "categoria": "Maquiagem",
+    "descricao": "Batom Rosa da linha maquiagem da DivaReal.",
+    "preco": 25.0,
+    "quantidade": 20,
+    "imagem": "https://http2.mlstatic.com/D_NQ_NP_688717-MLA113923750605_062026-O.webp"
   },
   {
     "id": 2,
-    "nome": "Batom vermelho",
-    "marca": "Marca Exemplo",
+    "nome": "Batom Nude",
+    "marca": "DivaReal",
     "categoria": "Maquiagem",
-    "descricao": "Batom de acabamento cremoso",
-    "preco": 24.9,
-    "quantidade": 8,
-    "imagem": "https://example.com/batom.jpg"
+    "descricao": "Batom Nude da linha maquiagem da DivaReal.",
+    "preco": 29.0,
+    "quantidade": 20,
+    "imagem": "https://http2.mlstatic.com/D_NQ_NP_952929-MLA110751355800_052026-O.webp"
+  },
+  {
+    "id": 3,
+    "nome": "Gloss Labial",
+    "marca": "DivaReal",
+    "categoria": "Maquiagem",
+    "descricao": "Gloss Labial da linha maquiagem da DivaReal.",
+    "preco": 22.0,
+    "quantidade": 20,
+    "imagem": "https://static.cdnlive.com.br/uploads/790/produto/17244184767391_detalhe.png"
+  },
+  {
+    "id": 4,
+    "nome": "Blush Rosa Quente",
+    "marca": "DivaReal",
+    "categoria": "Maquiagem",
+    "descricao": "Blush Rosa Quente da linha maquiagem da DivaReal.",
+    "preco": 32.0,
+    "quantidade": 20,
+    "imagem": "https://http2.mlstatic.com/D_NQ_NP_679503-MLB109677639812_042026-O-blush-color-glam-1--make-more.webp"
+  },
+  {
+    "id": 5,
+    "nome": "Paleta de Sombras",
+    "marca": "DivaReal",
+    "categoria": "Maquiagem",
+    "descricao": "Paleta de Sombras da linha maquiagem da DivaReal.",
+    "preco": 55.0,
+    "quantidade": 20,
+    "imagem": "https://mascavo.vtexassets.com/arquivos/ids/160837/paleta9.png?v=639154955080270000"
+  },
+  {
+    "id": 6,
+    "nome": "Máscara de Cílios",
+    "marca": "DivaReal",
+    "categoria": "Maquiagem",
+    "descricao": "Máscara de Cílios da linha maquiagem da DivaReal.",
+    "preco": 27.0,
+    "quantidade": 20,
+    "imagem": "https://i3-imagens-prd.araujo.com.br/redimensionada/380x380/107552/191764_7909189250868_3.webp"
+  },
+  {
+    "id": 7,
+    "nome": "Base Líquida",
+    "marca": "DivaReal",
+    "categoria": "Maquiagem",
+    "descricao": "Base Líquida da linha maquiagem da DivaReal.",
+    "preco": 48.0,
+    "quantidade": 20,
+    "imagem": "https://images.tcdn.com.br/img/img_prod/1217537/base_lquida_menimake_by_dride_1_20260621232024_b27bf0ff1c8b.png"
+  },
+  {
+    "id": 8,
+    "nome": "Pó Compacto",
+    "marca": "DivaReal",
+    "categoria": "Maquiagem",
+    "descricao": "Pó Compacto da linha maquiagem da DivaReal.",
+    "preco": 35.0,
+    "quantidade": 20,
+    "imagem": "https://cdn.gbmedia.com.br/images/w_1500,f_webp,fl_progressive,q_auto:eco,w_800/v1/imagens/product/Q56806/7ae0aafa-2e60-4678-9333-da72f2c79c30-q56806-instamatte-po-compacto-5g-color.jpg"
+  },
+  {
+    "id": 9,
+    "nome": "Corretivo",
+    "marca": "DivaReal",
+    "categoria": "Maquiagem",
+    "descricao": "Corretivo da linha maquiagem da DivaReal.",
+    "preco": 30.0,
+    "quantidade": 20,
+    "imagem": "https://latika.com.br/cdn/shop/files/Latika-Corretor-Liquido-Produto-Aberto-Preview_1.jpg?v=1764078198"
+  },
+  {
+    "id": 10,
+    "nome": "Iluminador",
+    "marca": "DivaReal",
+    "categoria": "Maquiagem",
+    "descricao": "Iluminador da linha maquiagem da DivaReal.",
+    "preco": 38.0,
+    "quantidade": 20,
+    "imagem": "https://http2.mlstatic.com/D_NQ_NP_921541-MLA111799368035_052026-O.webp"
+  },
+  {
+    "id": 11,
+    "nome": "Perfume Floral",
+    "marca": "DivaReal",
+    "categoria": "Perfumes",
+    "descricao": "Perfume Floral da linha perfumes da DivaReal.",
+    "preco": 89.0,
+    "quantidade": 20,
+    "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9t9lVPyA5qJmQLrg7k6b8sy2YCt2v7CNm7o0SWJT-KpXXQLXZ3KM__ett&s=10"
+  },
+  {
+    "id": 12,
+    "nome": "Perfume Elegance",
+    "marca": "DivaReal",
+    "categoria": "Perfumes",
+    "descricao": "Perfume Elegance da linha perfumes da DivaReal.",
+    "preco": 110.0,
+    "quantidade": 20,
+    "imagem": "https://images.tcdn.com.br/img/img_prod/1562773/elegance_perfume_feminino_inspiracao_idole_100_ml_335_1_9d6fda089999211abaf65353a043a44c.jpg"
+  },
+  {
+    "id": 13,
+    "nome": "Body Splash",
+    "marca": "DivaReal",
+    "categoria": "Perfumes",
+    "descricao": "Body Splash da linha perfumes da DivaReal.",
+    "preco": 59.0,
+    "quantidade": 20,
+    "imagem": "https://images.tcdn.com.br/img/img_prod/732256/body_splash_mademoiselle_230ml_1_20260514134457_f1c4fa5c0fa1.jpg"
+  },
+  {
+    "id": 14,
+    "nome": "Creme Hidratante",
+    "marca": "DivaReal",
+    "categoria": "Skincare",
+    "descricao": "Creme Hidratante da linha skincare da DivaReal.",
+    "preco": 45.0,
+    "quantidade": 20,
+    "imagem": "https://hidrabene.com.br/cdn/shop/files/hb-hidratante-lancamento.jpg?v=1790800419&width=1200"
+  },
+  {
+    "id": 15,
+    "nome": "Sérum Facial",
+    "marca": "DivaReal",
+    "categoria": "Skincare",
+    "descricao": "Sérum Facial da linha skincare da DivaReal.",
+    "preco": 65.0,
+    "quantidade": 20,
+    "imagem": "https://acdn-us.mitiendanube.com/stores/006/799/911/products/u5xbzcvpv6piojtm7kwgm_eislxbph_00001-078f31f1b91901357f17792158177067-640-0.webp"
+  },
+  {
+    "id": 16,
+    "nome": "Protetor Solar",
+    "marca": "DivaReal",
+    "categoria": "Skincare",
+    "descricao": "Protetor Solar da linha skincare da DivaReal.",
+    "preco": 52.0,
+    "quantidade": 20,
+    "imagem": "https://http2.mlstatic.com/D_NQ_NP_906795-MLA113885614375_062026-O-protetor-solar-facial-natura-fpele-mista-a-oleosa-fps70-50ml.webp"
+  },
+  {
+    "id": 17,
+    "nome": "Sabonete Facial",
+    "marca": "DivaReal",
+    "categoria": "Skincare",
+    "descricao": "Sabonete Facial da linha skincare da DivaReal.",
+    "preco": 28.0,
+    "quantidade": 20,
+    "imagem": "https://skintherapy.com.br/cdn/shop/files/Sabonete_Soft_Touch.jpg?v=1733927015"
+  },
+  {
+    "id": 18,
+    "nome": "Água Micelar",
+    "marca": "DivaReal",
+    "categoria": "Skincare",
+    "descricao": "Água Micelar da linha skincare da DivaReal.",
+    "preco": 36.0,
+    "quantidade": 20,
+    "imagem": "https://http2.mlstatic.com/D_NQ_NP_645698-MLB107585881856_032026-O-melu-ruby-rose-agua-micelar-limpa-renova-a-pele-200ml.webp"
+  },
+  {
+    "id": 19,
+    "nome": "Máscara Facial",
+    "marca": "DivaReal",
+    "categoria": "Skincare",
+    "descricao": "Máscara Facial da linha skincare da DivaReal.",
+    "preco": 19.0,
+    "quantidade": 20,
+    "imagem": "https://http2.mlstatic.com/D_NQ_NP_953475-MLA110119996524_042026-O-mascara-facial-purederm-green-tea-hidratante-em-gel-ads-748.webp"
+  },
+  {
+    "id": 20,
+    "nome": "Óleo Capilar",
+    "marca": "DivaReal",
+    "categoria": "Cabelos",
+    "descricao": "Óleo Capilar da linha cabelos da DivaReal.",
+    "preco": 39.0,
+    "quantidade": 20,
+    "imagem": "https://storage.googleapis.com/b4a-shop-products/7898649847246/images/7898649847246_4.webp"
+  },
+  {
+    "id": 21,
+    "nome": "Máscara Capilar",
+    "marca": "DivaReal",
+    "categoria": "Cabelos",
+    "descricao": "Máscara Capilar da linha cabelos da DivaReal.",
+    "preco": 44.0,
+    "quantidade": 20,
+    "imagem": "https://imagedelivery.net/5MJJJziyWgkBsDceUFKcGw/8dab01d3-95ed-45f2-2142-513e206eca00/public"
+  },
+  {
+    "id": 22,
+    "nome": "Shampoo",
+    "marca": "DivaReal",
+    "categoria": "Cabelos",
+    "descricao": "Shampoo da linha cabelos da DivaReal.",
+    "preco": 32.0,
+    "quantidade": 20,
+    "imagem": "https://t41847.vtexassets.com/arquivos/ids/10722728-800-800?v=639088509423030000&width=800&height=800&aspect=true"
+  },
+  {
+    "id": 23,
+    "nome": "Condicionador",
+    "marca": "DivaReal",
+    "categoria": "Cabelos",
+    "descricao": "Condicionador da linha cabelos da DivaReal.",
+    "preco": 34.0,
+    "quantidade": 20,
+    "imagem": "https://lojasrede.vtexassets.com/arquivos/ids/370893/794886-Condicionador-Eudora-Siage-Acelera-O-Crescimento-200ml.jpg?v=638457834804630000"
   }
 ]

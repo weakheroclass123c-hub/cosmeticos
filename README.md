@@ -1,47 +1,51 @@
-# Backend Cosméticos
-
-Projeto independente, feito com Node.js, Express e Swagger, com a mesma arquitetura básica do Projeto-Final fornecido.
+# DivaReal — loja e API de cosméticos
 
 ## Requisitos
-Node.js 18 ou superior e npm.
+- Node.js 19.3.0 ou superior (para este pacote de compatibilidade; Node.js 22 LTS é recomendado)
+- npm
 
 ## Como executar
-```powershell
-npm.cmd install
-npm.cmd start
-```
-No PowerShell do Windows, `npm.cmd` contorna o bloqueio de execução do arquivo `npm.ps1` sem mudar a política de segurança.
+1. Extraia a pasta do projeto.
+2. Abra o terminal dentro da pasta `cosmeticos-corrigido`.
+3. Execute `npm install` (o `package.json` fixa versões compatíveis com Node.js 19.3.0).
+4. Execute `npm start`.
+5. Abra `http://localhost:3001` para a loja.
+6. Abra `http://localhost:3001/api-docs` para a documentação Swagger.
 
-API: http://localhost:3001/api/cosmeticos
-
-Swagger: http://localhost:3001/api-docs
-
-Para executar com reinício automático: `npm.cmd run dev`.
-
-Para testar: `npm.cmd test`.
+A porta pode ser alterada pela variável de ambiente `PORT`. O Swagger usa uma URL relativa, então acompanha a porta configurada.
 
 ## Endpoints
-| Método | URL | Ação |
+| Método | Caminho | Função |
 |---|---|---|
-| GET | /api/cosmeticos | Listar todos |
-| GET | /api/cosmeticos/:id | Buscar por ID |
-| POST | /api/cosmeticos | Criar |
-| PUT | /api/cosmeticos/:id | Atualizar campos |
-| DELETE | /api/cosmeticos/:id | Excluir |
+| GET | `/api/cosmeticos` | Lista os cosméticos |
+| GET | `/api/cosmeticos/:id` | Consulta um cosmético |
+| POST | `/api/cosmeticos` | Cadastra um cosmético |
+| PUT | `/api/cosmeticos/:id` | Atualiza um cosmético |
+| DELETE | `/api/cosmeticos/:id` | Exclui um cosmético |
 
-Exemplo de corpo para POST:
+## Exemplo de cadastro
+Envie para `POST /api/cosmeticos` com `Content-Type: application/json`:
+
 ```json
 {
-  "nome": "Hidratante facial",
-  "marca": "Marca Exemplo",
-  "categoria": "Cuidados com a pele",
-  "descricao": "Hidratante para uso diário",
-  "preco": 39.9,
-  "quantidade": 12,
-  "imagem": "https://example.com/hidratante.jpg"
+  "nome": "Gloss Rosa",
+  "marca": "DivaReal",
+  "categoria": "Maquiagem",
+  "descricao": "Gloss labial com brilho",
+  "preco": 22.5,
+  "quantidade": 10,
+  "imagem": "https://exemplo.com/gloss.jpg"
 }
 ```
 
-Para PUT, envie somente os campos que deseja alterar. O ID é gerado automaticamente e não deve ser enviado. Os registros estão em `src/config/cosmeticos.json`, com dados fictícios iniciais que podem ser substituídos. GET devolve `data: []` quando não há registros. Respostas incluem códigos HTTP 200, 201, 400, 404 e 500.
+Os dados são armazenados em `src/config/cosmeticos.json`. Faça uma cópia desse arquivo antes de testar operações de cadastro, atualização ou exclusão se quiser preservar o catálogo original.
 
-**Observação:** a persistência em JSON é adequada para projetos de estudo, mas não foi projetada para gravações concorrentes em produção. Não possui autenticação nem banco de dados externo.
+O botão de finalizar pedido no frontend é apenas demonstrativo: não processa pagamento nem cria pedido no backend.
+
+
+## Compatibilidade com Node.js 19.3.0
+Este projeto fixa `swagger-jsdoc` em `6.2.8` e limita as dependências transitivas
+`glob`, `lru-cache` e `path-scurry` a versões compatíveis com o Node.js 19.3.0.
+Isso evita a chamada a `diagnostics_channel.tracingChannel`, que não existe nessa
+versão do Node.js. O Node.js 19 está fora de suporte oficial; para uso contínuo,
+prefira atualizar para Node.js 22 LTS.

@@ -18,10 +18,10 @@
     <div class="logo">Diva<span>Real</span> ♡</div>
 
     <nav>
-      <button onclick="showPage('inicio')">Início</button>
-      <button onclick="showPage('produtos')">Produtos</button>
-      <button onclick="showPage('sobre')">Sobre Nós</button>
-      <button onclick="showPage('inicio'); document.getElementById('cart').scrollIntoView()">
+      <button type="button" data-page="inicio">Início</button>
+      <button type="button" data-page="produtos">Produtos</button>
+      <button type="button" data-page="sobre">Sobre Nós</button>
+      <button type="button" id="goCart">
         🛒 Carrinho (<span id="count">0</span>)
       </button>
     </nav>
@@ -31,7 +31,7 @@
   <section class="hero">
     <h1>Realce sua beleza, seja uma Diva! ✨</h1>
     <p>Descubra produtos incríveis para cuidar de você.</p>
-    <button class="buy" onclick="showPage('produtos')">
+    <button type="button" class="buy" data-page="produtos">
       Conhecer produtos
     </button>
   </section>
@@ -44,12 +44,14 @@
       <p>Beleza, cuidado e autoestima em um só lugar!</p>
 
       <h2>Destaques da loja</h2>
+      <p id="featuredMessage" class="notice" aria-live="polite">Carregando produtos...</p>
       <div id="featured" class="grid"></div>
     </section>
 
     <!-- PRODUTOS -->
     <section id="produtos" class="page">
       <h2>Todos os nossos produtos 💄</h2>
+      <p id="productsMessage" class="notice" aria-live="polite">Carregando produtos...</p>
       <div class="categories" id="categories"></div>
       <div class="grid" id="productGrid"></div>
     </section>
@@ -59,7 +61,7 @@
       <div class="about">
         <h2>Sobre a DivaReal 🌸</h2>
         <p>
-          A DivaReal nasceu para valorizar a beleza
+          Criamos a DivaReal para valorizar a beleza
           e a autoestima de cada pessoa.
         </p>
         <p>
@@ -75,7 +77,7 @@
       <h2>🛒 Meu carrinho</h2>
       <div id="cartItems">Seu carrinho está vazio.</div>
       <div class="total" id="total">Total: R$ 0,00</div>
-      <button class="buy" onclick="checkout()">
+      <button type="button" class="buy" id="checkoutButton">
         Finalizar pedido
       </button>
     </section>

@@ -1,20 +1,25 @@
 {
-  "name": "backend-cosmeticos",
+  "name": "divareal-cosmeticos",
   "version": "1.0.0",
+  "description": "Loja DivaReal e API para gerenciamento de cosméticos",
   "type": "module",
-  "private": true,
-  "description": "API REST de Cosméticos",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js",
-    "test": "node --test"
+    "dev": "node --watch server.js"
   },
   "dependencies": {
-    "express": "^5.1.0",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "express": "^4.18.2",
+    "swagger-jsdoc": "6.2.8",
+    "swagger-ui-express": "4.6.3"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=19.0.0",
+    "npm": ">=9.0.0"
+  },
+  "overrides": {
+    "glob": "10.4.5",
+    "lru-cache": "10.4.3",
+    "path-scurry": "1.11.1"
   }
 }
